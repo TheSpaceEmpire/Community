@@ -1,0 +1,27 @@
+name: Community CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Validate Markdown Files
+        run: |
+          npm install -g markdownlint-cli
+          markdownlint **/*.md
+
+      - name: Validate Metadata
+        run: |
+          if [ ! -f metadata.yaml ]; then
+            echo "metadata.yaml not found!"
+            exit 1
+          fi
